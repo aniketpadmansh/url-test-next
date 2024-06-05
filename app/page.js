@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 export default function Home() {
   const inputRef = useRef();
@@ -12,15 +13,17 @@ export default function Home() {
   const parseUrlString = () => {
     if (!inputRef.current.value) return;
 
-    setUrls(inputRef.current.value?.split(","));
+    const u = inputRef.current.value
+      ?.split(",")
+      ?.map((url) => (url?.includes("https://") ? url : `https://${url}`));
+
+    setUrls(u);
   };
 
   const checkUrlAvailability = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(
-        `/get-url/${inputRef.current.value?.split("/").join("T")}`
-      );
+      const res = await axios.post(`/get-url`, urls);
       setParsedData(res?.data);
       setLoading(false);
     } catch (err) {
@@ -36,9 +39,17 @@ export default function Home() {
     navigator.clipboard.writeText(text);
   };
 
-  const nonAvailable = () => {
+  const copyNonAvailable = () => {
     const text = parsedData
       ?.filter((obj) => !obj?.available)
+      ?.map((obj) => obj?.url)
+      ?.join(",");
+    navigator.clipboard.writeText(text);
+  };
+
+  const copyRedirected = () => {
+    const text = parsedData
+      ?.filter((obj) => obj?.redirect)
       ?.map((obj) => obj?.url)
       ?.join(",");
     navigator.clipboard.writeText(text);
@@ -81,24 +92,35 @@ export default function Home() {
             <tr>
               <th>Url</th>
               <th>
-                <div className="flex items-center gap-x-2 ml-4">
+                <div className="flex flex-col gap-x-2 ml-4">
                   Valid{" "}
                   <button
                     onClick={copyInvalid}
-                    className="px-2 py-1 bg-gray-100 rounded-md font-medium text-xs"
+                    className="px-2 py-1 shrink-0 bg-gray-100 rounded-md font-medium text-xs"
                   >
-                    Copy
+                    Copy Non Valid
                   </button>
                 </div>
               </th>
               <th>
-                <div className="flex gap-x-2 items-center ml-4">
+                <div className="flex flex-col gap-x-2 ml-4">
                   Available{" "}
                   <button
-                    onClick={nonAvailable}
-                    className="px-2 text-xs py-1 bg-gray-100 rounded-md font-medium"
+                    onClick={copyNonAvailable}
+                    className="px-2 shrink-0 text-xs py-1 bg-gray-100 rounded-md font-medium"
                   >
-                    Copy
+                    Copy Non Available
+                  </button>
+                </div>
+              </th>
+              <th>
+                <div className="flex flex-col gap-x-2 ml-4">
+                  Redirected{" "}
+                  <button
+                    onClick={copyRedirected}
+                    className="px-2 shrink-0 text-xs py-1 bg-gray-100 rounded-md font-medium"
+                  >
+                    Copy Redirected
                   </button>
                 </div>
               </th>
@@ -108,9 +130,12 @@ export default function Home() {
           <tbody>
             {parsedData?.map((data, i) => (
               <tr key={i}>
-                <td className="w-[100px]">{data?.url}</td>
-                <td className="w-[100px]">{data?.valid ? "Yes" : "No"}</td>
-                <td className="w-[100px]">{data?.available ? "Yes" : "No"}</td>
+                <Link href={data?.url} target="_blank">
+                  <td className="w-[150px] text-blue-400">{data?.url}</td>
+                </Link>
+                <td className="w-[150px]">{data?.valid ? "Yes" : "No"}</td>
+                <td className="w-[150px]">{data?.available ? "Yes" : "No"}</td>
+                <td className="w-[150px]">{data?.redirect ? "Yes" : "No"}</td>
               </tr>
             ))}
           </tbody>
