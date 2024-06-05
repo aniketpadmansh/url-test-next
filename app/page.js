@@ -55,10 +55,21 @@ export default function Home() {
     navigator.clipboard.writeText(text);
   };
 
+  const clearUrls = () => {
+    if (urls?.length > 0) {
+      setUrls([]);
+      setParsedData([]);
+    }
+  };
+
   return (
     <>
       <div className="flex gap-x-2">
-        <input ref={inputRef} className="border rounded-md border-black px-2" />
+        <input
+          ref={inputRef}
+          onChange={clearUrls}
+          className="border rounded-md border-black px-2"
+        />
         <button
           onClick={parseUrlString}
           className="rounded-md bg-gray-200 px-4 py-1"
