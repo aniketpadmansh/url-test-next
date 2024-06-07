@@ -1,6 +1,6 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import ScratchCardOverlay from "./ScratchCardOverlay";
 import ScratchCard from "./ScratchCard";
 
@@ -32,7 +32,7 @@ export default function Scratch() {
   };
 
   return (
-    <>
+    <Suspense>
       <div className="flex gap-x-8">
         {couponArr?.map((coupon, i) => (
           <ScratchCard
@@ -50,6 +50,6 @@ export default function Scratch() {
         setShow={setShow}
         couponData={selectedCouponData}
       />
-    </>
+    </Suspense>
   );
 }
