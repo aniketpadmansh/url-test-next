@@ -19,7 +19,7 @@ const couponArr = [
   },
 ];
 
-export default function Scratch() {
+const Component = () => {
   const searchParams = useSearchParams();
 
   const [show, setShow] = useState(Number(searchParams.get("show")));
@@ -32,7 +32,7 @@ export default function Scratch() {
   };
 
   return (
-    <Suspense>
+    <>
       <div className="flex gap-x-8">
         {couponArr?.map((coupon, i) => (
           <ScratchCard
@@ -50,6 +50,14 @@ export default function Scratch() {
         setShow={setShow}
         couponData={selectedCouponData}
       />
+    </>
+  );
+};
+
+export default function Scratch() {
+  return (
+    <Suspense>
+      <Component />
     </Suspense>
   );
 }
