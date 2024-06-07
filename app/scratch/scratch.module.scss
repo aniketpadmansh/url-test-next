@@ -1,0 +1,130 @@
+.blackGradient {
+  background: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0.9) 30%
+  );
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+
+  > div > h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 24px;
+  }
+
+  > div > p {
+    font-size: 17px;
+    font-weight: 400;
+  }
+}
+
+.scratchStrip {
+  background: linear-gradient(
+      93.93deg,
+      #f9bc2e 0%,
+      #e29a1e 15%,
+      #ffcd38 30%,
+      #f0af30 75%,
+      #e29a1e 85%,
+      #ffcd38 95%,
+      #dd931a 100%
+    ),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05));
+  transform: rotate(-15deg) skew(-15deg);
+  margin: 20px -4px;
+
+  > p {
+    color: #000000;
+    font-weight: 700;
+    padding: 4px 0px;
+    text-align: center;
+    transform: skew(15deg);
+  }
+}
+
+.closeIcon {
+  background-color: white;
+  border-radius: 100%;
+  height: 48px;
+  width: 48px;
+  position: absolute;
+  right: 40px;
+  top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.scratchCardContainer {
+  height: 200px;
+  width: 200px;
+  background: #7515d5;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.scratchedBody {
+  padding: 0px 12px;
+
+  > p {
+    color: white;
+    text-align: center;
+    margin-top: 12px;
+    font-weight: 400;
+  }
+}
+
+.coinLottie {
+  height: 80px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.borderCurve {
+  border-radius: 14px;
+}
+
+.gift {
+  margin-top: 16px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.expiryContainer {
+  background-color: #ff823b;
+  border-radius: 100px;
+  padding: 2px 6px;
+  position: absolute;
+  right: 6px;
+  top: 6px;
+
+  > p {
+    color: white;
+    font-size: 10px;
+    font-weight: 400;
+  }
+}
