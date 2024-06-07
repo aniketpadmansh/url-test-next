@@ -141,12 +141,22 @@ export default function Home() {
           <tbody>
             {parsedData?.map((data, i) => (
               <tr key={i}>
-                <Link href={data?.url} target="_blank">
-                  <td className="w-[150px] text-blue-400">{data?.url}</td>
+                <Link
+                  className="w-[150px] text-center text-blue-400"
+                  href={data?.url}
+                  target="_blank"
+                >
+                  {data?.url}
                 </Link>
-                <td className="w-[150px]">{data?.valid ? "Yes" : "No"}</td>
-                <td className="w-[150px]">{data?.available ? "Yes" : "No"}</td>
-                <td className="w-[150px]">{data?.redirect ? "Yes" : "No"}</td>
+                <td className="w-[150px] text-center">
+                  {data?.valid ? "Yes" : "No"}
+                </td>
+                <td className="w-[150px] text-center">
+                  {data?.available ? "Yes" : "No"}
+                </td>
+                <td className="w-[150px] text-center">
+                  {data?.redirect ? "Yes" : "No"}
+                </td>
               </tr>
             ))}
           </tbody>
