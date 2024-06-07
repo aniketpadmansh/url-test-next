@@ -25,6 +25,7 @@ export default function ScratchCardOverlay({
   const handleClickOutside = (event) => {
     if (overlayRef.current && !overlayRef.current?.contains(event.target)) {
       setShow(false);
+      clearTimeout(timeRef.current);
     }
   };
 
