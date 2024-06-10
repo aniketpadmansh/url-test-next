@@ -1,4 +1,4 @@
-import TickCircle from "@/public/svgs/tickCircle";
+import TickCircle from "../../public/svgs/tickCircle";
 import styles from "./scratch.module.scss";
 import Copy from "../../public/svgs/Copy";
 import Ruppee from "../../public/svgs/Ruppee";
