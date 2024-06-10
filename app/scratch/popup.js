@@ -34,12 +34,12 @@ export default function Popup() {
             <Copy />
           </span>
         </p>
-        <p className={styles.text3Container}>
+        <div className={styles.text3Container}>
           Credited to Deposit{" "}
           <div>
             <Ruppee /> 10
           </div>
-        </p>
+        </div>
       </div>
     </div>
   );
