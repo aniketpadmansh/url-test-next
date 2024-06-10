@@ -83,6 +83,7 @@
   flex-direction: column;
   justify-content: center;
   position: relative;
+  transition: all 0.8s ease-in-out;
 }
 
 .scratchedBody {
@@ -94,6 +95,14 @@
     margin-top: 12px;
     font-weight: 400;
   }
+}
+
+.unscratchedBody {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  transition: all 0.5s ease-in;
 }
 
 .coinLottie {
@@ -126,5 +135,21 @@
     color: white;
     font-size: 10px;
     font-weight: 400;
+  }
+}
+
+.tilt {
+  transform: rotate(-45deg) scale(-0.25);
+
+  > .unscratchedBody {
+    opacity: 0;
+  }
+}
+
+.rotateAndGrow {
+  transform: rotate(-180deg) scale(-1);
+
+  > .unscratchedBody {
+    opacity: 1;
   }
 }

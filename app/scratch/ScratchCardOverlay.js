@@ -50,6 +50,7 @@ export default function ScratchCardOverlay({
           />
 
           <ScratchCard
+            animate={true}
             setShow={setShow}
             playConfetti={playConfetti}
             couponData={couponData}
