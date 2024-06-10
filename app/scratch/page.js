@@ -3,6 +3,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import ScratchCardOverlay from "./ScratchCardOverlay";
 import ScratchCard from "./ScratchCard";
+import Popup from "./popup";
 
 const couponArr = [
   {
@@ -43,6 +44,10 @@ const Component = () => {
             handleSelectCoupon={handleSelectCoupon}
           />
         ))}
+      </div>
+
+      <div className="flex w-full justify-center mt-16">
+        <Popup />
       </div>
 
       <ScratchCardOverlay

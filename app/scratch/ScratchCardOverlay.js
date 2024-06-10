@@ -1,10 +1,10 @@
 "use client";
 import styles from "./scratch.module.scss";
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 import ScratchCard from "./ScratchCard";
 import Lottie from "lottie-react";
 import confettiLottie from "../../public/confetti.json";
+import Close from "../../public/svgs/Close";
 
 export default function ScratchCardOverlay({
   show = false,
@@ -25,7 +25,9 @@ export default function ScratchCardOverlay({
   const handleClickOutside = (event) => {
     if (overlayRef.current && !overlayRef.current?.contains(event.target)) {
       setShow(false);
-      clearTimeout(timeRef.current);
+      if (timeRef.current) {
+        clearTimeout(timeRef.current);
+      }
     }
   };
 
@@ -66,7 +68,7 @@ export default function ScratchCardOverlay({
         }}
         className={styles.closeIcon}
       >
-        <Image src="/close.svg" priority alt="close" height={24} width={24} />
+        <Close />
       </button>
     </>
   ) : null;

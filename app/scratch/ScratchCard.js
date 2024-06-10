@@ -1,9 +1,9 @@
-import Image from "next/image";
 import styles from "./scratch.module.scss";
 import scratchLottie from "../../public/scratch.json";
 import coinLottie from "../../public/coin.json";
 import Lottie from "lottie-react";
 import { useEffect, useRef, useState } from "react";
+import Gift from "../../public/svgs/Gift";
 
 export default function ScratchCard({
   animate = false,
@@ -32,11 +32,8 @@ export default function ScratchCard({
     const [entry] = entries;
 
     if (entry.isIntersecting) {
-      // setTimeout(() => {
       cardRef.current.className = `${cardRef.current.className} ${styles.rotateAndGrow}`;
-      // }, 3000);
     }
-    console.log(entry.isIntersecting);
   };
 
   useEffect(() => {
@@ -90,13 +87,7 @@ export default function ScratchCard({
             ) : null}
 
             <div className={styles.gift}>
-              <Image
-                src="/gift.svg"
-                priority
-                alt="close"
-                height={52}
-                width={59}
-              />
+              <Gift />
             </div>
 
             <div className={styles.scratchStrip}>

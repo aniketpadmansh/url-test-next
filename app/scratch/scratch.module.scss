@@ -153,3 +153,111 @@
     opacity: 1;
   }
 }
+
+//popup
+.popupContainer {
+  width: 378px;
+  padding: 0px 20px 24px 20px;
+  border-radius: 12px;
+  background-color: #2b2e37;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  text-align: center;
+  position: relative;
+}
+
+.share {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+}
+
+.centerImage {
+  height: 152px;
+  width: 152px;
+  border-radius: 100%;
+  transform: translateY(-50%);
+}
+
+.textContainer {
+  margin-top: -86px;
+  width: 100%;
+
+  > .status {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px;
+  }
+
+  > .points {
+    font-size: 28px;
+    font-weight: 700;
+    margin-top: 12px;
+  }
+
+  > .text1 {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  > .date {
+    font-size: 10px;
+    font-weight: 600;
+    opacity: 0.6;
+    margin-top: 2px;
+  }
+
+  > .transactionStatus {
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+
+  > .text2 {
+    font-size: 10px;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+
+  > .id {
+    font-size: 10px;
+    font-weight: 500;
+    opacity: 0.4;
+    margin-top: 2px;
+    display: flex;
+    justify-content: center;
+
+    > span {
+      margin-left: 4px;
+      cursor: pointer;
+    }
+  }
+
+  > .text3Container {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 16px;
+    margin-top: 16px;
+    border-top-width: 1px;
+    width: 100%;
+    border-color: rgba(255, 255, 255, 0.1);
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+
+    > div {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .tickCtr {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+    margin-bottom: 4px;
+  }
+}
