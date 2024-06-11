@@ -1,9 +1,9 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
-import walkForward from "../../public/walking_man_forward.json";
-import walkBackward from "../../public/walking_man_backward.json";
-import stopForward from "../../public/stop_man_forward.json";
-import stopBackward from "../../public/stop_man_backward.json";
+import walkForward from "../../public/lotties/walking_man_forward.json";
+import walkBackward from "../../public/lotties/walking_man_backward.json";
+import stopForward from "../../public/lotties/stop_man_forward.json";
+import stopBackward from "../../public/lotties/stop_man_backward.json";
 import Lottie from "lottie-react";
 
 const walkingLottie = {
@@ -23,7 +23,7 @@ const is_negative_trade = false;
 const SPEED = 120; // pixel per second
 const HALF_MAN_WIDTH = 44 / 2;
 
-export default function Move() {
+const Move = () => {
   const outerRef = useRef(null);
   const manRef = useRef(null);
 
@@ -100,4 +100,6 @@ export default function Move() {
       />
     </div>
   );
-}
+};
+
+export default Move;

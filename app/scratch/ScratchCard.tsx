@@ -1,18 +1,27 @@
 import styles from "./scratch.module.scss";
-import scratchLottie from "../../public/scratch.json";
-import coinLottie from "../../public/coin.json";
+import scratchLottie from "../../public/lotties/scratch.json";
+import coinLottie from "../../public/lotties/coin.json";
 import Lottie from "lottie-react";
 import { useEffect, useRef, useState } from "react";
 import Gift from "../../public/svgs/Gift";
 
+interface T {
+  couponData: { cardText: string };
+  isReveal: boolean;
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  animate?: boolean;
+  playConfetti?: Function;
+  handleSelectCoupon?: Function;
+}
+
 export default function ScratchCard({
   animate = false,
-  couponData = {},
+  couponData,
   isReveal = true,
   playConfetti = () => {},
   setShow = () => {},
   handleSelectCoupon = () => {},
-}) {
+}: T) {
   const scratchLottieRef = useRef(null);
   const cardRef = useRef(null);
 

@@ -9,31 +9,33 @@ const graphColorConfig = {
   NEGATIVE: "#DD4C4C",
 };
 
-export default function TradeViewGraph({ stockMeta }) {
+const TradeViewGraph = ({ stockMeta }) => {
+  const { market_price_change, last_traded_price, trade_ticks } =
+    stockMeta || {};
   return (
     <div className={styles.relative}>
       <div>
         <p className={`${styles.text16} ${styles.textWhite}`}>
-          ₹{stockMeta?.last_traded_price}
+          ₹{last_traded_price}
         </p>
 
         <div
           className={`${
-            stockMeta?.market_price_change?.type === NEGATIVE
+            market_price_change?.type === NEGATIVE
               ? styles.textRed
               : styles.textGreen
           } ${styles.text12} -mt-1`}
         >
-          {stockMeta?.market_price_change?.type === NEGATIVE ? "-" : "+"}
-          {Math.abs(stockMeta?.market_price_change?.value)} (
-          {Math.abs(stockMeta?.market_price_change?.percentage)}%)
+          {market_price_change?.type === NEGATIVE ? "-" : "+"}
+          {Math.abs(market_price_change?.value)} (
+          {Math.abs(market_price_change?.percentage)}%)
         </div>
       </div>
 
       <div className={styles.graphContainer}>
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
-            data={stockMeta?.trade_ticks}
+            data={trade_ticks}
             margin={{
               top: 5,
               right: 0,
@@ -44,9 +46,7 @@ export default function TradeViewGraph({ stockMeta }) {
               <linearGradient id="colorGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="15%"
-                  stopColor={
-                    graphColorConfig?.[stockMeta?.market_price_change?.type]
-                  }
+                  stopColor={graphColorConfig?.[market_price_change?.type]}
                   stopOpacity={1}
                 />
                 <stop
@@ -68,4 +68,6 @@ export default function TradeViewGraph({ stockMeta }) {
       </div>
     </div>
   );
-}
+};
+
+export default TradeViewGraph;

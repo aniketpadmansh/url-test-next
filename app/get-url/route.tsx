@@ -5,7 +5,7 @@ const REDIRECT = "Redirected";
 const in200 = new RegExp("2[0-9]{2}");
 const in300 = new RegExp("3[0-9]{2}");
 
-const checkUrl = (url) => {
+const checkUrl = (url: string) => {
   return new Promise((res, rej) => {
     try {
       new URL(url);

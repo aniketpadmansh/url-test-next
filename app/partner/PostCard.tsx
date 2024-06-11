@@ -11,7 +11,7 @@ const PDF_FILE = "application/pdf";
 
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
-export default function PostCard({ downloadPdf, postContent }) {
+export default function PostCard({ postContent }) {
   return (
     <div className={styles.postContainer}>
       <div className={styles.postHeader}>

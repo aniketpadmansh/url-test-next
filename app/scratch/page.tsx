@@ -23,7 +23,9 @@ const couponArr = [
 const Component = () => {
   const searchParams = useSearchParams();
 
-  const [show, setShow] = useState(Number(searchParams.get("show")));
+  const [show, setShow] = useState(
+    Number(searchParams.get("show")) ? true : false
+  );
   const [selectedCouponData, setSelectedCouponData] = useState({
     cardText: "if user comes directly set this",
   });

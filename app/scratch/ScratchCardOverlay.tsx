@@ -3,14 +3,20 @@ import styles from "./scratch.module.scss";
 import { useEffect, useRef } from "react";
 import ScratchCard from "./ScratchCard";
 import Lottie from "lottie-react";
-import confettiLottie from "../../public/confetti.json";
+import confettiLottie from "../../public/lotties/confetti.json";
 import Close from "../../public/svgs/Close";
+
+interface T {
+  show: boolean;
+  couponData: { cardText: string };
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 export default function ScratchCardOverlay({
   show = false,
-  couponData = {},
-  setShow = () => {},
-}) {
+  couponData,
+  setShow,
+}: T) {
   const confettiLottieRef = useRef(null);
   const timeRef = useRef(null);
   const overlayRef = useRef(null);
