@@ -4,7 +4,7 @@ import PostCard from "./PostCard";
 import TradeCard from "./TradeCard";
 import styles from "./partner.module.scss";
 
-const Partne = () => {
+const Partner = () => {
   return (
     <div className="bg-[#1f2127] h-screen p-4 rounded-xl">
       <p
@@ -31,4 +31,4 @@ const Partne = () => {
   );
 };
 
-export default Partne;
+export default Partner;

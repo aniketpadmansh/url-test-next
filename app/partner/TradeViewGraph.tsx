@@ -12,6 +12,8 @@ const graphColorConfig = {
 const TradeViewGraph = ({ stockMeta }) => {
   const { market_price_change, last_traded_price, trade_ticks } =
     stockMeta || {};
+  const { value, percentage, type } = market_price_change || {};
+
   return (
     <div className={styles.relative}>
       <div>
@@ -21,14 +23,11 @@ const TradeViewGraph = ({ stockMeta }) => {
 
         <div
           className={`${
-            market_price_change?.type === NEGATIVE
-              ? styles.textRed
-              : styles.textGreen
+            type === NEGATIVE ? styles.textRed : styles.textGreen
           } ${styles.text12} -mt-1`}
         >
-          {market_price_change?.type === NEGATIVE ? "-" : "+"}
-          {Math.abs(market_price_change?.value)} (
-          {Math.abs(market_price_change?.percentage)}%)
+          {type === NEGATIVE ? "-" : "+"}
+          {Math.abs(value)} ({Math.abs(percentage)}%)
         </div>
       </div>
 
@@ -46,7 +45,7 @@ const TradeViewGraph = ({ stockMeta }) => {
               <linearGradient id="colorGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="15%"
-                  stopColor={graphColorConfig?.[market_price_change?.type]}
+                  stopColor={graphColorConfig?.[type]}
                   stopOpacity={1}
                 />
                 <stop

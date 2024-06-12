@@ -27,9 +27,9 @@ const Move = () => {
   const outerRef = useRef(null);
   const manRef = useRef(null);
 
-  const [startPoint, setStartPoint] = useState(0);
-  const [endPoint, setEndPoint] = useState(0);
-  const [ended, setEnded] = useState(false);
+  const [startPoint, setStartPoint] = useState<number>(0);
+  const [endPoint, setEndPoint] = useState<number>(0);
+  const [ended, setEnded] = useState<boolean>(false);
 
   useEffect(() => {
     if (outerRef.current) {

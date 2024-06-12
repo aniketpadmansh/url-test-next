@@ -12,6 +12,8 @@ interface T {
   animate?: boolean;
   playConfetti?: Function;
   handleSelectCoupon?: Function;
+  showText?: boolean;
+  multi?: boolean;
 }
 
 export default function ScratchCard({
@@ -21,6 +23,8 @@ export default function ScratchCard({
   playConfetti = () => {},
   setShow = () => {},
   handleSelectCoupon = () => {},
+  showText,
+  multi = false,
 }: T) {
   const scratchLottieRef = useRef(null);
   const cardRef = useRef(null);
@@ -77,7 +81,7 @@ export default function ScratchCard({
           <div className={styles.unscratchedBody}>
             {isReveal ? null : (
               <Lottie
-                style={{ position: "fixed", width: "100%", height: "100%" }}
+                style={{ position: "absolute", width: "100%", height: "100%" }}
                 lottieRef={scratchLottieRef}
                 autoplay={false}
                 loop={false}
@@ -106,7 +110,7 @@ export default function ScratchCard({
         )}
       </div>
 
-      {isReveal ? null : (
+      {isReveal || !showText ? null : (
         <>
           <h3>Congratulations!</h3>
           <p>You got a new scratch card</p>

@@ -61,6 +61,38 @@
   }
 }
 
+.purpleClose {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  background-color: #6046cf;
+  transform: translateX(50%) translateY(-50%);
+  height: 40px;
+  width: 40px;
+  right: 0;
+  top: 0;
+}
+
+.arrowContainer {
+  border-radius: 100%;
+  height: 24px;
+  width: 24px;
+  background-color: #6046cf;
+  position: absolute;
+}
+
+.arrowLeft {
+  left: 0;
+  transform: translateX(-50%);
+}
+
+.arrowRight {
+  right: 0;
+  transform: translateX(50%);
+}
+
 .closeIcon {
   background-color: white;
   border-radius: 100%;
@@ -84,6 +116,7 @@
   justify-content: center;
   position: relative;
   transition: all 0.8s ease-in-out;
+  flex-shrink: 0;
 }
 
 .scratchedBody {
@@ -152,6 +185,71 @@
   > .unscratchedBody {
     opacity: 1;
   }
+}
+
+.sliderContainer {
+  width: 656px;
+  height: 366px;
+  padding: 40px;
+  border-radius: 12px;
+  background-color: #191b22;
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  > .slideContainer {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+
+    > div {
+      text-align: center;
+    }
+
+    > div > h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 24px;
+    }
+
+    > div > p {
+      font-size: 17px;
+      font-weight: 400;
+    }
+  }
+
+  > div > .slide {
+    display: flex;
+    column-gap: 8px;
+    transition: all 0.5s ease-in-out;
+  }
+}
+
+.gradBlock {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  z-index: 2;
+}
+
+.gradLeft {
+  left: 0;
+  width: 30%;
+  background: linear-gradient(
+    to right,
+    rgba(25, 27, 34, 0.75),
+    rgba(25, 27, 34, 0)
+  );
+}
+
+.gradRight {
+  right: 0;
+  width: 30%;
+  background: linear-gradient(
+    to left,
+    rgba(25, 27, 34, 0.75),
+    rgba(25, 27, 34, 0)
+  );
 }
 
 //popup

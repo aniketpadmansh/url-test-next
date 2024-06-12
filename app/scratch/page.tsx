@@ -1,6 +1,6 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import ScratchCardOverlay from "./ScratchCardOverlay";
 import ScratchCard from "./ScratchCard";
 import Popup from "./popup";
@@ -20,25 +20,35 @@ const couponArr = [
   },
 ];
 
+interface Card {
+  cardText: string;
+}
+
 const Component = () => {
   const searchParams = useSearchParams();
 
-  const [show, setShow] = useState(
-    Number(searchParams.get("show")) ? true : false
-  );
-  const [selectedCouponData, setSelectedCouponData] = useState({
-    cardText: "if user comes directly set this",
-  });
+  const [show, setShow] = useState<boolean>(false);
+  const [selectedCouponData, setSelectedCouponData] = useState<
+    Card | Card[] | null
+  >(null);
 
-  const handleSelectCoupon = (data) => {
+  const handleSelectCoupon = (data: Card) => {
     setSelectedCouponData(data);
   };
+
+  useEffect(() => {
+    if (Number(searchParams.get("show"))) {
+      setSelectedCouponData(couponArr);
+      setShow(true);
+    }
+  }, []);
 
   return (
     <>
       <div className="flex gap-x-8">
         {couponArr?.map((coupon, i) => (
           <ScratchCard
+            multi={false}
             key={i}
             isReveal={true}
             setShow={setShow}
