@@ -14,6 +14,7 @@ interface T {
   handleSelectCoupon?: Function;
   showText?: boolean;
   multi?: boolean;
+  updateCoupons?: Function;
 }
 
 export default function ScratchCard({
@@ -24,12 +25,14 @@ export default function ScratchCard({
   setShow = () => {},
   handleSelectCoupon = () => {},
   showText,
+  updateCoupons = () => {},
   multi = false,
 }: T) {
   const scratchLottieRef = useRef(null);
   const cardRef = useRef(null);
 
   const [isScratched, setIsScratched] = useState(false);
+  const [isScratching, setIsScratching] = useState(false);
 
   const scratchTheCard = () => {
     if (isReveal) {
@@ -38,6 +41,7 @@ export default function ScratchCard({
       return;
     }
 
+    setIsScratching(true);
     scratchLottieRef?.current?.play();
   };
 
@@ -88,6 +92,10 @@ export default function ScratchCard({
                 onComplete={() => {
                   setIsScratched(true);
                   playConfetti();
+
+                  setTimeout(() => {
+                    updateCoupons();
+                  }, 3000);
                 }}
                 animationData={scratchLottie}
               />
@@ -103,9 +111,11 @@ export default function ScratchCard({
               <Gift />
             </div>
 
-            <div className={styles.scratchStrip}>
-              <p>{isReveal ? "Reveal Now" : "Scratch Here"}</p>
-            </div>
+            {isScratching ? null : (
+              <div className={styles.scratchStrip}>
+                <p>{isReveal ? "Reveal Now" : "Scratch Here"}</p>
+              </div>
+            )}
           </div>
         )}
       </div>

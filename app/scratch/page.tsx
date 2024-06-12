@@ -4,24 +4,31 @@ import { Suspense, useEffect, useState } from "react";
 import ScratchCardOverlay from "./ScratchCardOverlay";
 import ScratchCard from "./ScratchCard";
 import Popup from "./popup";
+import NavBar from "./Nav";
+import { StoreProvider } from "../store/Provider";
 
 const couponArr = [
   {
+    id: 1,
     cardText: `🎉 WOW! You've won 1 ₹300 Check your wallet to redeem it now! 💸`,
   },
   {
+    id: 2,
     cardText: `🎉 WOW! You've won 2 ₹300 Check your wallet to redeem it now! 💸`,
   },
   {
+    id: 3,
     cardText: `🎉 WOW! You've won 3 ₹300 Check your wallet to redeem it now! 💸`,
   },
   {
+    id: 4,
     cardText: `🎉 WOW! You've won 4 ₹300 Check your wallet to redeem it now! 💸`,
   },
 ];
 
 interface Card {
   cardText: string;
+  id: number;
 }
 
 const Component = () => {
@@ -45,10 +52,11 @@ const Component = () => {
 
   return (
     <>
+      <NavBar />
+
       <div className="flex gap-x-8">
         {couponArr?.map((coupon, i) => (
           <ScratchCard
-            multi={false}
             key={i}
             isReveal={true}
             setShow={setShow}
@@ -66,6 +74,7 @@ const Component = () => {
         show={show}
         setShow={setShow}
         couponData={selectedCouponData}
+        setCouponData={setSelectedCouponData}
       />
     </>
   );
@@ -74,7 +83,9 @@ const Component = () => {
 export default function Scratch() {
   return (
     <Suspense>
-      <Component />
+      <StoreProvider>
+        <Component />
+      </StoreProvider>
     </Suspense>
   );
 }

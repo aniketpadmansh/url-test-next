@@ -1,27 +1,34 @@
 "use client";
 import styles from "./scratch.module.scss";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import ScratchCard from "./ScratchCard";
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
 import confettiLottie from "../../public/lotties/confetti.json";
 import Close from "../../public/svgs/Close";
+import { StoreContext } from "../store/context";
+import ArrowRight from "../../public/svgs/ArrowRight";
 
 interface Card {
   cardText: string;
+  id: number;
 }
 
 interface T {
   show: boolean;
   couponData: Array<Card> | Card;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  setCouponData: React.Dispatch<React.SetStateAction<Card | Card[]>>;
 }
 
 export default function ScratchCardOverlay({
   show = false,
   couponData,
   setShow,
+  setCouponData,
 }: T) {
   const multi = Array.isArray(couponData) ? true : false;
+
+  const { dispatch } = useContext(StoreContext);
 
   // const timeRef = useRef(null);
   const confettiLottieRef = useRef<LottieRefCurrentProps | null>(null);
@@ -42,10 +49,48 @@ export default function ScratchCardOverlay({
       overlayRef.current &&
       !overlayRef.current?.contains(event.target as Node)
     ) {
-      setShow(false);
+      closeOverlay();
       // if (timeRef.current) {
       //   clearTimeout(timeRef.current);
       // }
+    }
+  };
+
+  const moveLeft = () => {
+    if (activeIndex > 0) {
+      setTranslateX(translateX + 208);
+      setActiveIndex((index) => index - 1);
+    }
+  };
+
+  const moveRight = () => {
+    if (activeIndex < (couponData as Card[])?.length - 1) {
+      setTranslateX(translateX - 208);
+      setActiveIndex((index) => index + 1);
+    }
+  };
+
+  const closeOverlay = () => {
+    // clearTimeout(timeRef.current);
+    dispatch({ type: "PLAY" });
+    setShow(false);
+  };
+
+  const updateCoupons = (index: number) => {
+    const remaining = JSON.parse(JSON.stringify(couponData));
+    remaining?.splice(index, 1);
+
+    if (remaining?.length > 0) {
+      setCouponData(remaining);
+    } else {
+      setShow(false);
+    }
+
+    // if (activeIndex === 0) {
+    //   moveRight();
+    // } else
+    if (activeIndex === (couponData as Card[])?.length - 1) {
+      moveLeft();
     }
   };
 
@@ -90,14 +135,11 @@ export default function ScratchCardOverlay({
               />
 
               <div
-                onClick={() => {
-                  if (activeIndex > 0) {
-                    setTranslateX(translateX + 208);
-                    setActiveIndex((index) => index - 1);
-                  }
-                }}
+                onClick={moveLeft}
                 className={`${styles.arrowContainer} ${styles.arrowLeft}`}
-              />
+              >
+                <ArrowRight />
+              </div>
 
               <div className={styles.slideContainer}>
                 <div
@@ -108,7 +150,7 @@ export default function ScratchCardOverlay({
                 >
                   {(couponData as Card[])?.map((coupon: Card, i: number) => (
                     <div
-                      key={i}
+                      key={coupon.id}
                       style={
                         activeIndex === i
                           ? { transition: `all 0.5s ease-in-out` }
@@ -119,9 +161,12 @@ export default function ScratchCardOverlay({
                       }
                     >
                       <ScratchCard
+                        multi={multi}
+                        updateCoupons={() => {
+                          updateCoupons(i);
+                        }}
                         isReveal={false}
                         showText={false}
-                        // multi={multi}
                         setShow={setShow}
                         playConfetti={playConfetti}
                         couponData={coupon}
@@ -140,22 +185,13 @@ export default function ScratchCardOverlay({
               </div>
 
               <div
-                onClick={() => {
-                  if (activeIndex < (couponData as Card[])?.length - 1) {
-                    setTranslateX(translateX - 208);
-                    setActiveIndex((index) => index + 1);
-                  }
-                }}
+                onClick={moveRight}
                 className={`${styles.arrowContainer} ${styles.arrowRight}`}
-              />
-
-              <button
-                onClick={() => {
-                  // clearTimeout(timeRef.current);
-                  setShow(false);
-                }}
-                className={styles.purpleClose}
               >
+                <ArrowRight />
+              </div>
+
+              <button onClick={closeOverlay} className={styles.purpleClose}>
                 <Close height={24} width={24} stroke="#fff" />
               </button>
             </div>
@@ -163,7 +199,6 @@ export default function ScratchCardOverlay({
             <ScratchCard
               animate={true}
               setShow={setShow}
-              // multi={multi}
               playConfetti={playConfetti}
               couponData={couponData as Card}
               isReveal={false}
@@ -173,13 +208,7 @@ export default function ScratchCardOverlay({
       </div>
 
       {multi ? null : (
-        <button
-          onClick={() => {
-            // clearTimeout(timeRef.current);
-            setShow(false);
-          }}
-          className={styles.closeIcon}
-        >
+        <button onClick={closeOverlay} className={styles.closeIcon}>
           <Close />
         </button>
       )}
