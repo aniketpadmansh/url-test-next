@@ -13,7 +13,10 @@ const colorConfig = {
 
 const TradeCard = ({ tradeContent }) => {
   const profiltLeft = tradeContent?.trade_sentiment?.[0];
-  const stockMeta = tradeContent?.stock_meta;
+  const { stock_meta: stockMeta, status } = tradeContent || {};
+  const { image_url, identifier, name } = stockMeta || {};
+  const { text_prefix, color, type, percentage, text_suffix } =
+    profiltLeft || {};
 
   return (
     <div className={styles.tradeViewCardContainer}>
@@ -22,22 +25,20 @@ const TradeCard = ({ tradeContent }) => {
           height={36}
           width={36}
           className={styles.stockItemImage}
-          src={stockMeta?.image_url}
-          alt={stockMeta?.identifier}
+          src={image_url}
+          alt={identifier}
         />
 
         <div className={styles.midCell}>
-          <p className={`${styles.textWhite} ${styles.textBold}`}>
-            {stockMeta?.name}
-          </p>
+          <p className={`${styles.textWhite} ${styles.textBold}`}>{name}</p>
           <p
             className={`${styles.textGray} ${styles.textMedium} ${styles.text12}`}
           >
-            {stockMeta?.identifier}
+            {identifier}
           </p>
         </div>
 
-        {tradeContent?.status === ACTIVE ? (
+        {status === ACTIVE ? (
           <div
             className={`${styles.textWhite} ${styles.textSemibold} flex self-start items-center`}
           >
@@ -51,22 +52,18 @@ const TradeCard = ({ tradeContent }) => {
 
       <div className={styles.tradeViewCardFooterContainer}>
         <p>
-          {profiltLeft?.text_prefix ? (
+          {text_prefix ? (
             <span className={`${styles.textWhite} ${styles.textSemibold}`}>
-              {profiltLeft?.text_prefix}
+              {text_prefix}
             </span>
           ) : null}{" "}
-          <span
-            className={`${colorConfig?.[profiltLeft?.color]} ${
-              styles.textBlack
-            }`}
-          >
-            {profiltLeft?.type === NEGATIVE ? "-" : ""}
-            {profiltLeft?.percentage}%
+          <span className={`${colorConfig?.[color]} ${styles.textBlack}`}>
+            {type === NEGATIVE ? "-" : ""}
+            {percentage}%
           </span>{" "}
-          {profiltLeft?.text_suffix ? (
+          {text_suffix ? (
             <span className={`${styles.textWhite} ${styles.textSemibold}`}>
-              {profiltLeft?.text_suffix}
+              {text_suffix}
             </span>
           ) : null}
         </p>
