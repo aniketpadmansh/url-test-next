@@ -33,9 +33,11 @@ export default function ScratchCardOverlay({
   // const timeRef = useRef(null);
   const confettiLottieRef = useRef<LottieRefCurrentProps | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
+  const widthRef = useRef<HTMLDivElement | null>(null);
 
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [translateX, setTranslateX] = useState<number>(188);
+  const [translateXMob, setTranslateXMob] = useState<number>(0);
 
   const playConfetti = () => {
     confettiLottieRef?.current?.play();
@@ -66,6 +68,20 @@ export default function ScratchCardOverlay({
   const moveRight = () => {
     if (activeIndex < (couponData as Card[])?.length - 1) {
       setTranslateX(translateX - 208);
+      setActiveIndex((index) => index + 1);
+    }
+  };
+
+  const moveLeftMob = () => {
+    if (activeIndex > 0 && widthRef?.current) {
+      setTranslateXMob(translateXMob + widthRef?.current?.offsetWidth + 12);
+      setActiveIndex((index) => index - 1);
+    }
+  };
+
+  const moveRightMob = () => {
+    if (activeIndex < (couponData as Card[])?.length - 1 && widthRef?.current) {
+      setTranslateXMob(translateXMob - widthRef?.current?.offsetWidth - 12);
       setActiveIndex((index) => index + 1);
     }
   };
@@ -115,86 +131,181 @@ export default function ScratchCardOverlay({
               animationData={confettiLottie}
             />
           )}
-
           {multi ? (
-            <div className={styles.sliderContainer}>
-              <Lottie
-                style={{
-                  position: "absolute",
-                  width: "100%",
-                  left: 0,
-                  right: 0,
-                }}
-                autoplay={false}
-                loop={false}
-                lottieRef={confettiLottieRef}
-                animationData={confettiLottie}
-                onComplete={() => {
-                  confettiLottieRef.current.goToAndStop(0);
-                }}
-              />
-
-              <div
-                onClick={moveLeft}
-                className={`${styles.arrowContainer} ${styles.arrowLeft}`}
-              >
-                <ArrowRight />
-              </div>
-
-              <div className={styles.slideContainer}>
-                <div
-                  className={styles.slide}
+            <>
+              <div className={`${styles.sliderContainer}  ${styles.hideOnMob}`}>
+                <Lottie
                   style={{
-                    transform: `translateX(${translateX}px)`,
+                    position: "absolute",
+                    width: "100%",
+                    left: 0,
+                    right: 0,
                   }}
-                >
-                  {(couponData as Card[])?.map((coupon: Card, i: number) => (
-                    <div
-                      key={coupon.id}
-                      style={
-                        activeIndex === i
-                          ? { transition: `all 0.5s ease-in-out` }
-                          : {
-                              transform: `scale(0.8)`,
-                              transition: `all 0.5s ease-in-out`,
-                            }
-                      }
-                    >
-                      <ScratchCard
-                        multi={multi}
-                        updateCoupons={() => {
-                          updateCoupons(i);
-                        }}
-                        isReveal={false}
-                        showText={false}
-                        setShow={setShow}
-                        playConfetti={playConfetti}
-                        couponData={coupon}
-                      />
-                    </div>
-                  ))}
+                  autoplay={false}
+                  loop={false}
+                  lottieRef={confettiLottieRef}
+                  animationData={confettiLottie}
+                  onComplete={() => {
+                    confettiLottieRef.current.goToAndStop(0);
+                  }}
+                />
+
+                {activeIndex > 0 ? (
+                  <div
+                    onClick={moveLeft}
+                    className={`${styles.arrowContainer} ${styles.arrowLeft}`}
+                  >
+                    <ArrowRight />
+                  </div>
+                ) : null}
+
+                <div className={styles.slideContainer}>
+                  <div
+                    className={styles.slide}
+                    style={{
+                      transform: `translateX(${translateX}px)`,
+                    }}
+                  >
+                    {(couponData as Card[])?.map((coupon: Card, i: number) => (
+                      <div
+                        key={coupon.id}
+                        className={styles.scrollContainer}
+                        style={
+                          activeIndex === i
+                            ? {
+                                transition: `all 0.5s ease-in-out`,
+                              }
+                            : {
+                                transform: `scale(0.8)`,
+                                transition: `all 0.5s ease-in-out`,
+                              }
+                        }
+                      >
+                        <ScratchCard
+                          multi={multi}
+                          updateCoupons={() => {
+                            updateCoupons(i);
+                          }}
+                          isReveal={false}
+                          showText={false}
+                          setShow={setShow}
+                          playConfetti={playConfetti}
+                          couponData={coupon}
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className={`${styles.gradLeft} ${styles.gradBlock}`} />
+                  <div className={`${styles.gradRight} ${styles.gradBlock}`} />
+
+                  <div>
+                    <h3>Congratulations!</h3>
+                    <p>You got a new scratch card</p>
+                  </div>
                 </div>
 
-                <div className={`${styles.gradLeft} ${styles.gradBlock}`} />
-                <div className={`${styles.gradRight} ${styles.gradBlock}`} />
+                {activeIndex < (couponData as Card[])?.length - 1 ? (
+                  <div
+                    onClick={moveRight}
+                    className={`${styles.arrowContainer} ${styles.arrowRight}`}
+                  >
+                    <ArrowRight />
+                  </div>
+                ) : null}
 
-                <div>
-                  <h3>Congratulations!</h3>
-                  <p>You got a new scratch card</p>
+                <button onClick={closeOverlay} className={styles.purpleClose}>
+                  <Close height={24} width={24} stroke="#fff" />
+                </button>
+              </div>
+
+              <div className={`${styles.sliderContainer}  ${styles.hideOnWeb}`}>
+                <Lottie
+                  style={{
+                    position: "absolute",
+                    width: "100%",
+                    left: 0,
+                    right: 0,
+                  }}
+                  autoplay={false}
+                  loop={false}
+                  lottieRef={confettiLottieRef}
+                  animationData={confettiLottie}
+                  onComplete={() => {
+                    confettiLottieRef.current.goToAndStop(0);
+                  }}
+                />
+
+                {activeIndex > 0 ? (
+                  <div
+                    onClick={moveLeftMob}
+                    className={`${styles.arrowContainer} ${styles.arrowLeft}`}
+                  >
+                    <ArrowRight />
+                  </div>
+                ) : null}
+
+                <div className={styles.slideContainer}>
+                  <div
+                    className={styles.slide}
+                    style={{
+                      transform: `translateX(${translateXMob}px)`,
+                    }}
+                  >
+                    {(couponData as Card[])?.map((coupon: Card, i: number) => (
+                      <div
+                        ref={widthRef}
+                        key={coupon.id}
+                        className={styles.scrollContainer}
+                        style={
+                          activeIndex === i
+                            ? {
+                                transition: `all 0.5s ease-in-out`,
+                              }
+                            : {
+                                transform: `scale(0.8)`,
+                                transition: `all 0.5s ease-in-out`,
+                              }
+                        }
+                      >
+                        <ScratchCard
+                          multi={multi}
+                          updateCoupons={() => {
+                            updateCoupons(i);
+                          }}
+                          isReveal={false}
+                          showText={false}
+                          setShow={setShow}
+                          playConfetti={playConfetti}
+                          couponData={coupon}
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className={`${styles.gradLeft} ${styles.gradBlock}`} />
+                  <div className={`${styles.gradRight} ${styles.gradBlock}`} />
+
+                  <div>
+                    <h3>Congratulations!</h3>
+                    <p>You got a new scratch card</p>
+                  </div>
                 </div>
-              </div>
 
-              <div
-                onClick={moveRight}
-                className={`${styles.arrowContainer} ${styles.arrowRight}`}
-              >
-                <ArrowRight />
-              </div>
+                {activeIndex < (couponData as Card[])?.length - 1 ? (
+                  <div
+                    onClick={moveRightMob}
+                    className={`${styles.arrowContainer} ${styles.arrowRight}`}
+                  >
+                    <ArrowRight />
+                  </div>
+                ) : null}
 
-              <button onClick={closeOverlay} className={styles.purpleClose}>
-                <Close height={24} width={24} stroke="#fff" />
-              </button>
-            </div>
+                <button onClick={closeOverlay} className={styles.purpleClose}>
+                  <Close height={24} width={24} stroke="#fff" />
+                </button>
+              </div>
+            </>
           ) : (
             <ScratchCard
               animate={true}

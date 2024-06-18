@@ -54,7 +54,7 @@ const Component = () => {
     <>
       <NavBar />
 
-      <div className="flex gap-x-8">
+      <div className="flex gap-x-8 gap-y-6 flex-wrap">
         {couponArr?.map((coupon, i) => (
           <ScratchCard
             key={i}

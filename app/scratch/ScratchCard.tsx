@@ -85,7 +85,11 @@ export default function ScratchCard({
           <div className={styles.unscratchedBody}>
             {isReveal ? null : (
               <Lottie
-                style={{ position: "absolute", width: "100%", height: "100%" }}
+                style={{
+                  position: "absolute",
+                  width: "100%",
+                  height: "100%",
+                }}
                 lottieRef={scratchLottieRef}
                 autoplay={false}
                 loop={false}
