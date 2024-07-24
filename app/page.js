@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import Script from "next/script";
 
 export default function Home() {
   const inputRef = useRef();
@@ -162,6 +163,24 @@ export default function Home() {
           </tbody>
         </table>
       ) : null}
+
+      <Script src="https://cdn.shopify.com/shopifycloud/app-bridge.js"></Script>
+      <Script id="test" strategy="beforeInteractive" async>
+        {
+          `var AppBridge = window['app-bridge'];
+            var actions = AppBridge.actions;
+            var TitleBar = actions.TitleBar;
+            var app = AppBridge.createApp({
+                apiKey: 'a4dcc3265352dea96cefdaed3ee330dd',
+                shopOrigin: 'rx-demo.myshopify.com'
+            });
+            var titleBar = TitleBar.create(app, {
+                title: 'Bubble App Integration',
+            });
+            titleBar.subscribe(TitleBar.Action.PRIMARY, function() {
+                app.dispatch(Redirect.toApp({ path: '/partner' }));
+            });`}
+      </Script>
     </>
   );
 }
