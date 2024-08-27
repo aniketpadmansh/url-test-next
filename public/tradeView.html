@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Description of your page for SEO">
+    <meta name="author" content="Your Name or Company">
+    <meta name="keywords" content="keywords, related, to, your, page">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+    <title>Trade View Card</title>
+
+    <script src="https://unpkg.com/react/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/prop-types/prop-types.min.js"></script>
+    <script src="https://unpkg.com/recharts/umd/Recharts.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        .bullish {
+            color: #37d69e;
+        }
+
+        .bearish {
+            color: #dd4c4c;
+        }
+
+        .tradeTick {
+            flex: 1;
+            height: 2px;
+            border-radius: 2px;
+            margin-right: 2px;
+        }
+
+        .redBorder {
+            background-color: #dd4c4c;
+        }
+
+        .greenBorder {
+            background-color: #37d69e;
+        }
+
+        .whiteBorder {
+            background-color: #d4d4d4;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <section>
+            <div
+                style="width: 350px; background-color: #2a2d39; border-radius: 8px; border: 1px solid #393d4f; overflow: hidden; font-family: Inter;">
+                <div style="padding: 16px; display: flex; column-gap: 8px;">
+                    <img id="stock-image" style="border-radius: 100%;" data-testid="sg-avatar-image" alt=""
+                        src="https://storage.googleapis.com/stocks_logo/stocks/LODHA.png" width="36" height="36"
+                        loading="lazy">
+
+                    <div id="stock-detail" style="flex: 1; color: #fff;">
+                        <h3 style="margin: 0px; font-size: 14px; font-weight: 700;">Hindustan Copper</h3>
+                        <p style="margin: 0px; font-size: 12px; font-weight: 500; opacity: 0.5; line-height: 18px;">
+                            HINDCOPPER</p>
+                    </div>
+
+                    <div id="buy-sell-text" style="text-align: right;">
+                        <h4 style="margin: 0px; font-size: 14px; font-weight: 600; line-height: 18px;">BUY</h4>
+                        <p style="margin: 0px; font-size: 12px; font-weight: 400; line-height: 16px;">Short Term</p>
+                    </div>
+                </div>
+
+                <div id="trade_view"
+                    style="display: flex; align-items: center; position: relative; margin: 12px 16px 56px 16px;">
+                    <div id="trade-line"
+                        style="position: absolute; display: flex; align-items: center; justify-content: space-between; width: 100%;">
+
+                    </div>
+
+                    <div id="circle-1"
+                        style="width: 18px; height: 18px; border-radius: 100%; background-color: #EBEBEB; display: flex; justify-content: center; align-items: center; position: absolute;">
+                    </div>
+
+                    <div id="circle-2"
+                        style="width: 18px; height: 18px; border-radius: 100%; background-color: #EBEBEB; display: flex; justify-content: center; align-items: center; position: absolute;">
+                    </div>
+
+                    <div id="entry-text-box" style="position: absolute; top: 24px; color:#fff">
+                        <p style="font-size: 12px; margin: 0px; line-height: 16px;">Entry</p>
+                        <p style="font-size: 14px; font-weight: 600; margin: 0px; line-height: 22px;">Entry
+                            Amount</p>
+                    </div>
+
+                    <div id="target-text-box" style="position: absolute; top: 24px; color: #37d69e;">
+                        <p style="font-size: 12px; margin: 0px; line-height: 16px;">Target</p>
+                        <p style="font-size: 14px; font-weight: 600; margin: 0px; line-height: 22px;">
+                            Target Amount</p>
+                    </div>
+                </div>
+
+                <div id="chart"></div>
+
+                <div id="percent_bar"
+                    style="background-color: #393d4f; padding: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 400;">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="text/babel">
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const direction = urlParams.get('direction');
+        const trade_duration = urlParams.get('trade_duration');
+        const target_price = urlParams.get('target_price');
+        const entry_price = urlParams.get('entry_price');
+        const identifier = urlParams.get('identifier');
+        const image_url = urlParams.get('image_url');
+        const name = urlParams.get('name');
+        const text_suffix = urlParams.get('text_suffix');
+        const text_prefix = urlParams.get('text_prefix');
+        const percentage = urlParams.get('percentage');
+        const entry_position = urlParams.get('entry_position');
+        const indicator_position = urlParams.get('indicator_position');
+        const is_negative_trade = urlParams.get('is_negative_trade');
+        const target_position = urlParams.get('target_position');
+        const market_price_change = urlParams.get('market_price_change');
+        const trade_data = JSON.parse(urlParams.get('trade_data') || JSON.stringify([]));
+
+        const buySellText = document.getElementById('buy-sell-text');
+        const stockDetail = document.getElementById('stock-detail');
+        const stockImage = document.getElementById('stock-image');
+        const percentBar = document.getElementById('percent_bar');
+        const entryCircle = document.getElementById('circle-1');
+        const targetCircle = document.getElementById('circle-2');
+        const entryBox = document.getElementById('entry-text-box');
+        const targetBox = document.getElementById('target-text-box');
+        const tradeLine = document.getElementById('trade-line');
+
+        const dottedLineColorPosition = () => {
+            if (direction === 'Bullish') {
+                const startingPosition = '0';
+                const endPosition = indicator_position >= entry_position ? indicator_position : entry_position;
+                return { startingPosition, endPosition }
+            } else {
+                const startingPosition = is_negative_trade === 'true' ? entry_position : indicator_position;
+                const endPosition = '100';
+                return { startingPosition, endPosition }
+            }
+        }
+
+        const dottedLineColor = (positionPercentage) => {
+            const { startingPosition, endPosition } = dottedLineColorPosition();
+            if (direction === 'Bullish') {
+                return positionPercentage <= endPosition ? is_negative_trade === 'true' ? 'redBorder' : 'greenBorder' : 'whiteBorder';
+            } else {
+                return positionPercentage >= startingPosition ? is_negative_trade === 'true' ? 'redBorder' : 'greenBorder' : 'whiteBorder';
+            }
+        }
+
+        const getCurrency = (value) => {
+            let val = value || 0
+            if (typeof (value) === 'string') {
+                val = Number(value)
+            }
+            const neagtive = val < 0
+            const absValue = Math.abs(Number(val));
+            return (`<div>
+                    <span>${neagtive ? '-' : ''}&nbsp;&#8377;</span>
+                    ${absValue.toLocaleString("en-IN", { style: 'decimal', maximumFractionDigits: 2, minimumFractionDigits: 2 })}
+                </div>`
+            )
+        }
+
+        buySellText.firstElementChild.textContent = direction === 'Bullish' ? 'BUY' : 'SELL';
+        buySellText.lastElementChild.textContent = trade_duration;
+        stockDetail.firstElementChild.textContent = name;
+        stockDetail.lastElementChild.textContent = identifier;
+        stockImage.src = image_url;
+        percentBar.innerHTML = "<div>" + (text_prefix || '') + " <span>" + (percentage || 0) + "%</span> " + (text_suffix || '') + " </div>";
+        entryBox.lastElementChild.innerHTML = getCurrency(entry_price);
+        targetBox.lastElementChild.innerHTML = getCurrency(target_price);
+
+        const elements = Array.from({ length: 40 }, (_, i) => i + 1);
+        const percentagePerDiv = 100 / 40;
+        elements.forEach((item, index) => {
+            const positionPercentage = index * percentagePerDiv;
+            const newDiv = document.createElement('div');
+            newDiv.classList.add('tradeTick');
+            newDiv.classList.add(dottedLineColor(positionPercentage));
+
+            tradeLine.appendChild(newDiv);
+        });
+
+        if (direction === 'Bullish') {
+            buySellText.classList.add('bullish');
+            percentBar.firstElementChild.firstElementChild.classList.add('bullish');
+        } else if (direction === 'Bearish') {
+            buySellText.classList.add('bearish');
+            percentBar.firstElementChild.firstElementChild.classList.add('bearish');
+        }
+
+        if (target_position === '100') {
+            targetCircle.style.right = '0px';
+            targetBox.style.right = '0px';
+        }
+        else if (target_position === '0') {
+            targetCircle.style.left = '0px';
+            targetBox.style.left = '0px';
+        }
+        else {
+            targetCircle.style.left = `${target_position}%`;
+            targetBox.style.left = `${target_position}%`;
+        }
+
+        if (entry_position === '100') {
+            entryCircle.style.right = '0px';
+            entryBox.style.right = '0px';
+        }
+        else if (entry_position === '0') {
+            entryCircle.style.left = '0px';
+            entryBox.style.left = '0px';
+        }
+        else {
+            entryCircle.style.left = `${entry_position}%`;
+
+            if (entry_position > 50) {
+                entryBox.style.right = `${100 - entry_position}%`
+            }
+            else {
+                entryBox.style.left = `${entry_position}%`;
+            }
+        }
+
+        const { AreaChart, Area, XAxis, YAxis, ResponsiveContainer } = Recharts;
+
+        const yValues = Array.from(new Set(trade_data?.map((entry) => entry.val)))?.sort((a, b) => a - b);
+        const minY = Math.min(...yValues);
+        const maxY = Math.max(...yValues);
+        const marketTypePositive = market_price_change === 'POSITIVE'
+
+        const calculateWidthPercentage = (dataLength) => {
+            const maxDataPoints = 72;
+            if (dataLength >= maxDataPoints) return '100%';
+            return `${(dataLength / maxDataPoints) * 100}%`;
+        };
+
+        const chartWidth = calculateWidthPercentage(trade_data.length);
+
+        const AreaChartComponent = () => {
+            return (
+                <div style={{ width: '100%', height: 40 }}>
+                    <ResponsiveContainer width={chartWidth} height="100%">
+                        <AreaChart
+                            data={trade_data}
+                            margin={{
+                                top: 10, right: 0, left: 0, bottom: 0
+                            }}
+                        >
+                            <defs>
+                                <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="4.37%" stopColor="#BC4343" />
+                                    <stop offset="96.24%" stopColor="#2A2D39" />
+                                </linearGradient>
+                            </defs>
+                            <defs>
+                                <linearGradient id="colorGradientGreen" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="#41B68B" stopOpacity={0.8} />
+                                    <stop offset="95%" stopColor="#2A2D39" stopOpacity={0.8} />
+                                </linearGradient>
+                            </defs>
+
+                            <XAxis height={0} dataKey="ts" tick={false} axisLine={false} tickLine={false} />
+                            <YAxis width={0} dataKey="val" tick={false} ticks={yValues} interval={0} domain={[minY, maxY]} />
+                            <Area type="monotone" dataKey="val" stroke="transparent" fill={marketTypePositive ? "url(#colorGradientGreen)" : "url(#colorGradient)"} fillOpacity={1} />
+                        </AreaChart>
+                    </ResponsiveContainer>
+                </div>
+            );
+        }
+
+        ReactDOM.render(
+            React.createElement(AreaChartComponent),
+            document.getElementById('chart')
+        );
+    </script>
+</body>
+
+</html>
